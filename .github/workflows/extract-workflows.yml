@@ -1,0 +1,26 @@
+name: Extract GitHub Workflows Zip
+
+on:
+  push:
+    paths:
+      - 'github-workflows.zip'
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Unzip github-workflows.zip
+        run: |
+          unzip -o github-workflows.zip -d ./.github/workflows
+          rm github-workflows.zip
+
+      - name: Commit extracted workflows
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .github/workflows
+          git commit -m "Extracted GitHub workflows via GitHub Action"
+          git push
