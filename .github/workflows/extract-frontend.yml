@@ -1,0 +1,26 @@
+name: Extract Frontend Zip
+
+on:
+  push:
+    paths:
+      - 'frontend.zip'
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Unzip frontend.zip
+        run: |
+          unzip -o frontend.zip -d ./frontend
+          rm frontend.zip
+
+      - name: Commit extracted frontend
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add frontend
+          git commit -m "Extracted frontend.zip via GitHub Action"
+          git push
